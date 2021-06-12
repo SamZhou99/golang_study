@@ -12,6 +12,9 @@ node_modules/
 *.jar
 *.rar
 *.tar
+*.png
+*.jpg
+*.gif
 
 
 public/hot
