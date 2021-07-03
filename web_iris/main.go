@@ -46,6 +46,7 @@ func fbnq(ctx iris.Context) {
 func main() {
 	app := iris.New()
 	app.Logger().SetLevel("debug")
+	app.HandleDir("/", "./static")
 
 	app.Use(recover.New())
 	app.Use(logger.New())

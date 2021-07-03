@@ -1,8 +1,10 @@
 // C:\Users\Administrator\go\src\golang.org\x
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func main()  {
+func main() {
 	fmt.Println("Hello, World!")
 }
