@@ -1,0 +1,12 @@
+{
+    "screenshot": {
+        "top": 101,
+        "left": 102,
+        "width": 103,
+        "height": 104
+    },
+    "socket": {
+        "ip": "127.0.0.1",
+        "port": 9999
+    }
+}
