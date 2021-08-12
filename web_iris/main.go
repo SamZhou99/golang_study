@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"github.com/kataras/iris/v12"
 
 	"github.com/kataras/iris/v12/middleware/logger"
@@ -67,6 +70,19 @@ func main() {
 
 	app.Get("/markdown", func(ctx iris.Context) {
 		ctx.Markdown(markdownContent)
+	})
+
+	app.Get("long_async", func(ctx iris.Context) {
+		// ctxCopy := ctx.Clone()
+		go func() {
+			time.Sleep(5 * time.Second)
+			log.Printf("Done! in path: %s , 这里可操作数据库", ctx.Path())
+		}()
+	})
+	app.Get("/long_sync", func(ctx iris.Context) {
+		time.Sleep(5 * time.Second)
+		log.Printf("Done! in path: %s", ctx.Path())
+		ctx.WriteString("done")
 	})
 
 	// 斐波那契 数列

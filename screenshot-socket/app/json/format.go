@@ -2,14 +2,14 @@ package json
 
 // JSON格式
 type Screenshot struct {
-	Top    int32 `json:top`
-	Left   int32 `json:left`
-	Width  int32 `json:width`
-	Height int32 `json:height`
+	Top    int `json:top`
+	Left   int `json:left`
+	Width  int `json:width`
+	Height int `json:height`
 }
 type Socket struct {
 	Ip   string `json:ip`
-	Port int32  `json:port`
+	Port int    `json:port`
 }
 
 type Config struct {
