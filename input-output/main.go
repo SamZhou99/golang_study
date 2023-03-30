@@ -23,7 +23,7 @@ func input_number() uint64 {
 
 func main() {
 	num := input_number()
-	fmt.Println("输入的数：", num)
+	fmt.Println("你输入的数是：", num)
 }
 
 // 知识点：字符串 转 整数

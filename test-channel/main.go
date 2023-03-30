@@ -6,23 +6,23 @@ import (
 )
 
 func main() {
-	c := make(chan int, 3) // 缓冲通道 3
-
+	c := make(chan int, 5) // 缓冲通道 3
+	capNum := cap(c)
 	go func() {
 		defer fmt.Println("goroutine 结束")
 		// 注意看打印结果，当读一个 i 后，这里的goroutine才会结束
-		for i := 0; i < 4; i++ {
-			fmt.Println("goroutine 正在运行", len(c), cap(c))
+		for i := 0; i < capNum; i++ {
+			fmt.Println("goroutine 正在运行", len(c), capNum)
 			c <- i // 将i写入通道
 		}
 
-		// close(c) // 尝试关闭 通道 //会影响打印结果
+		close(c) // 尝试关闭 通道 //会影响打印结果
 
 	}()
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(1000000 * time.Microsecond)
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < capNum; i++ {
 		num := <-c // 从通道中读取i
 		fmt.Printf("num = %d\n", num)
 	}
@@ -43,4 +43,5 @@ func main() {
 	// }
 
 	fmt.Println("main goroutine 结束")
+	// close(c)
 }
