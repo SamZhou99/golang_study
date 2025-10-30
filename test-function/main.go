@@ -10,4 +10,7 @@ func main() {
 	r2, err2 := math2.Add(-2, 4)
 	fmt.Println(r1, err1)
 	fmt.Println(r2, err2)
+
+	// 函数传递函数作为参数
+	math2.Demo()
 }
