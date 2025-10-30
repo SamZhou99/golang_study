@@ -27,6 +27,7 @@ func clientInfo(ctx iris.Context) {
 	ctx.Writef("IP:%s\r\nreferrer:%s", ip, referrer)
 }
 
+// 斐波那契 计算
 func fbnq(ctx iris.Context) {
 	// num := ctx.Params().GetUint64Default("num", 0)
 	num := ctx.URLParamDefault("num", "0")
@@ -46,6 +47,7 @@ func fbnq(ctx iris.Context) {
 	ctx.View("fbnq.html")
 }
 
+// 这里开始运行
 func main() {
 	app := iris.New()
 	app.Logger().SetLevel("debug")
