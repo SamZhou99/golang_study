@@ -1,0 +1,28 @@
+打开网站
+https://goproxy.io/
+
+
+
+按照相应平台命令行 执行代码
+
+Bash (Linux or macOS)
+# Set the GOPROXY environment variable
+export GOPROXY=https://goproxy.io,direct
+# Set environment variable allow bypassing the proxy for specified repos (optional)
+export GOPRIVATE=git.mycompany.com,github.com/my/private
+
+
+
+PowerShell (Windows)
+# Set the GOPROXY environment variable
+$env:GOPROXY = "https://goproxy.io,direct"
+# Set environment variable allow bypassing the proxy for specified repos (optional)
+$env:GOPRIVATE = "git.mycompany.com,github.com/my/private"
+
+
+然后例如
+go get github.com/gorilla/websocket
+
+
+编译
+go build ./mian.go

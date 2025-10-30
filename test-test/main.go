@@ -3,35 +3,45 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"test-test/sort"
+	"strconv"
+	compTime "test-test/computing-time"
+	mathSort "test-test/sort"
 	"time"
 )
 
-func main() {
-	fmt.Println("Sort")
-
-	const MAX int = 999
-
-	var values, values2 []int
-	rand.Seed(time.Now().Unix())
-	for i := 0; i < MAX; i++ {
-		r := rand.Intn(MAX)
+func randLen(MaxNum int) []int {
+	var values []int
+	rand.New(rand.NewSource(time.Now().Unix())) // rand.Seed(time.Now().Unix()) // 旧的放弃方法
+	for i := 0; i < MaxNum; i++ {
+		r := rand.Intn(MaxNum)
 		values = append(values, []int{r}...)
 	}
+	return values
+}
 
-	values2 = append(values, []int{}...)
+func arrToStr(values []int, a int) string {
+	s1 := fmt.Sprintf("%v", values[:a])
+	s2 := fmt.Sprintf("%v", values[len(values)-a:])
+	s3 := strconv.Itoa(len(values) - a*2)
+	return s1 + "[..." + s3 + "]" + s2
+}
 
-	fmt.Println("\n原数据：", values)
+func main() {
+	fmt.Println("排序算法 计算时间 比较")
 
-	start := time.Now()
-	sort.QuickSort(values)
-	fmt.Println("\n快排结果：", values)
-	elapsed := time.Since(start)
-	fmt.Println("耗时：", elapsed)
+	var val1 = randLen(9999)
+	var val2 = make([]int, len(val1))
+	copy(val2, val1)
 
-	start2 := time.Now()
-	sort.BubbleSort(values2)
-	fmt.Println("\n冒泡结果：", values2)
-	elapsed2 := time.Since(start2)
-	fmt.Println("耗时：", elapsed2)
+	fmt.Println("\n原数据计算总长度：", len(val1))
+
+	fmt.Println("快排数据：", arrToStr(val1, 5))
+	compTime.Start()
+	mathSort.QuickSort(val1)
+	fmt.Println("快排耗时：", compTime.End())
+
+	fmt.Println("冒泡数据：", arrToStr(val2, 5))
+	compTime.Start()
+	mathSort.BubbleSort(val2)
+	fmt.Println("冒泡耗时：", compTime.End())
 }
