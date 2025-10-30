@@ -2,37 +2,39 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"test-file/textrw"
 )
 
-func readFile(fileName string) bool {
-	data, err := ioutil.ReadFile(fileName)
+func demo_read() {
+	fmt.Println("开始")
+
+	filename := "01_test.txt"
+	// result, err := textrw.ReadFile(filename)
+	// result, err := textrw.ReadScanner(filename)
+	result, err := textrw.ReadBytes(filename, 1024)
+
 	if err != nil {
-		fmt.Println("ioutil.ReadFile err = ", err)
-		return false
+		fmt.Println("textrw err = ", err)
+		return
 	}
-	fmt.Println(data)
-	return true
+	fmt.Println(string(result))
+
+	fmt.Println("结束")
 }
 
-func writeFile(fileName string, data []byte) bool {
-	err := ioutil.WriteFile(fileName, data, 0777)
-	if err != nil {
-		fmt.Println("ioutil.WriteFile err = ", err)
-		return false
-	}
-	return true
+func demo_write() {
+	fmt.Println("开始")
+
+	filename := "01_test.txt"
+	// textrw.WriteFile(filename, "Hello, 世界！\n这是通过 Go 写入的文本。")
+	// textrw.AppendFile(filename, "\n这是追加的内容。")
+	textrw.StreamWrite(filename, "\n这是追加的内容。")
+
+	fmt.Println("结束")
 }
 
 func main() {
-	fmt.Println("main init")
-	// byteValue := make([]byte, 1)
-	// byteValue[0] = 1
-	// shortValue := make([]byte, 2)
-	// shortValue[0] = 2
+	// demo_read()
 
-	// data := append(byteValue, shortValue...)
-
-	// writeFile("01_test.txt", data)
-	readFile("01_test.txt")
+	demo_write()
 }
