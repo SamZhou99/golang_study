@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	dx = 600
-	dy = 200
+	dx = 256 * 2
+	dy = 256
 )
 
 func main() {
