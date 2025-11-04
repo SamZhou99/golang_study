@@ -41,5 +41,5 @@ func createFile(fileName string) {
 }
 
 func Demo() {
-	createFile("./test.jpeg")
+	createFile("./demo_test.jpeg")
 }
