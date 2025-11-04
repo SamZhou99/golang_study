@@ -31,6 +31,10 @@ func clientInfo(ctx iris.Context) {
 func fbnq(ctx iris.Context) {
 	// num := ctx.Params().GetUint64Default("num", 0)
 	num := ctx.URLParamDefault("num", "0")
+	if num == "0" {
+		ctx.HTML("<h1>请输入正确的参数 如:num=5</h1>")
+		return
+	}
 	n, _ := strconv.Atoi(num)
 
 	n1 := 1
