@@ -20,7 +20,7 @@ func main() {
 
 	for i := 0; i < n; i++ {
 		// bounds := screenshot.GetDisplayBounds(i) // 全屏
-		bounds := image.Rect(300, 300, 300+800, 300+500) // 截图范围
+		bounds := image.Rect(0, 0, 1024, 768) // 截图范围
 		img, err := screenshot.CaptureRect(bounds)
 		if err != nil {
 			panic(err)
