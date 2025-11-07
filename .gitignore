@@ -14,8 +14,8 @@ node_modules/
 *.jar
 *.rar
 *.tar
-# *.png
-# *.jpg
+*.png
+*.jpg
 *.gif
 
 
