@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"image"
-	"image/jpeg"
-	"image/png"
+	_ "image/jpeg"
+	_ "image/png"
 	"os"
 )
 
@@ -14,54 +14,12 @@ func OpenFile(imgPath string) *os.File {
 	if err != nil {
 		panic("无法打开图片：" + imgPath + "，错误信息：" + err.Error())
 	}
-	defer file.Close()
 	return file
-}
-
-func ReadImg(filePath string) image.Image {
-	// a, format, err := image.DecodeConfig(file)
-	// imge, format, err := image.Decode(file)
-	b, file, e := GetFileByte(filePath)
-	if e != nil {
-		panic("获取字节失败：" + e.Error())
-	}
-	format, err := GetImageFormatByHeader(b)
-	fmt.Println("【", "|", format, "|", err, "】")
-	if err != nil {
-		panic("1图片解码失败：" + err.Error())
-	}
-
-	var imgD image.Image
-	switch format {
-	case "jpeg":
-		imgD, err = jpeg.Decode(file)
-	case "png":
-		imgD, err = png.Decode(file)
-	default:
-		panic("不支持的图片格式：" + format)
-	}
-
-	if err != nil {
-		panic("图片解码失败：" + err.Error())
-	}
-	return imgD
-}
-
-func ImgInfo(img image.Image) {
-	bounds := img.Bounds()
-	width := bounds.Max.X
-	height := bounds.Max.Y
-	fmt.Printf("图片，宽度：%d，高度：%d\n", width, height)
 }
 
 func GetFileByte(filePath string) ([]byte, *os.File, error) {
 	header := make([]byte, 16)
-	file, err := os.Open(filePath)
-	if err != nil {
-		return header, file, err
-	}
-	defer file.Close()
-
+	file := OpenFile(filePath)
 	// 读取文件头前 16 字节（足够判断大部分格式）
 	n, err := bufio.NewReader(file).Read(header)
 	if err != nil || n < 8 { // 至少需要 8 字节判断常见格式
@@ -103,4 +61,21 @@ func GetImageFormatByHeader(header []byte) (string, error) {
 	}
 
 	return "unknown", nil
+}
+
+func ImgDecode(file *os.File) (image.Image, error) {
+	img, _, err := image.Decode(file)
+	// img, err := jpeg.Decode(file)
+	fmt.Println(file)
+	if err != nil {
+		return nil, fmt.Errorf("无法解码图片：%w", err)
+	}
+	return img, nil
+}
+
+func ImgInfo(img image.Image) {
+	bounds := img.Bounds()
+	width := bounds.Max.X
+	height := bounds.Max.Y
+	fmt.Printf("图片，宽度：%d，高度：%d\n", width, height)
 }

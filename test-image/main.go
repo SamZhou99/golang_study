@@ -9,21 +9,22 @@ func main() {
 
 	// img.Demo()
 
-	img_path := []string{"./assets/001.jpeg", "./assets/001.png", "./assets/001.webp"}
+	img_path := []string{"./assets/001 (1).jpg", "./assets/001 (1).png"}
 	for i, v := range img_path {
 		fmt.Println(i, v)
-		b, f, e := img.GetFileByte(v)
-		fmt.Println(b, f, e)
-		img_fmt, err := img.GetImageFormatByHeader(b)
-		if err != nil {
-			fmt.Println(err)
+		b, f, _ := img.GetFileByte(v)
+
+		img_fmt, _ := img.GetImageFormatByHeader(b)
+		fmt.Println("-------格式", img_fmt)
+		imgd, e := img.ImgDecode(f)
+		if e != nil {
+			fmt.Println("-------无法解码图片", e)
+			f.Close()
+			return
 		}
-		fmt.Println("-------", img_fmt)
+		img.ImgInfo(imgd)
+
+		f.Close()
 	}
-	// b, f, e := img.GetFileByte(img_path)
-	// fmt.Println(b, f, e)
-	// file := img.OpenFile(img_path)
-	// local_img := img.ReadImg(file)
-	// img.ImgInfo(local_img)
 
 }
