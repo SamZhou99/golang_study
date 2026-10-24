@@ -40,6 +40,7 @@ func createFile(fileName string) {
 	jpeg.Encode(file, alpha, nil) //将image信息写入文件中
 }
 
+// Demo 演示生成渐变色图片
 func Demo() {
 	createFile("./demo_test.jpeg")
 }

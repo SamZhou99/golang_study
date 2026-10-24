@@ -12,7 +12,7 @@ import (
 func SaveImg(imgRgba image.Image, index int) {
 	now := time.Now()
 	nowTime := now.Format("20060102_150405")
-	outImgFileName := "./red_" + nowTime + "_" + strconv.Itoa(index) + ".png"
+	outImgFileName := "./A_" + nowTime + "_" + strconv.Itoa(index) + ".png"
 
 	file, err := os.Create(outImgFileName)
 	if err != nil {

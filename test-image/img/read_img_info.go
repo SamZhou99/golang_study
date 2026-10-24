@@ -12,14 +12,18 @@ import (
 func ReadImageInfo(index int, imgPath string) image.Image {
 	file, err := os.Open(imgPath)
 	if err != nil {
-		panic("无法打开图片：" + imgPath + "，错误信息：" + err.Error())
+		showError("请检查图片路径和文件名：", err)
 	}
 	defer file.Close()
 
 	img_data, format, err := image.Decode(file)
 	if err != nil {
-		panic("图片解析异常：" + err.Error())
+		showError("图片解析异常：", err)
 	}
-	fmt.Println("索引："+strconv.Itoa(index), "图片路径："+imgPath, "图片格式："+format)
+	fmt.Println("索引："+strconv.Itoa(index), "图片路径："+imgPath, "格式："+format)
 	return img_data
+}
+
+func showError(tipstr string, err error) {
+	panic("\n💔💔💔\n" + tipstr + err.Error() + "\n")
 }
