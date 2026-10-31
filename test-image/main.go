@@ -8,20 +8,13 @@ import (
 	"time"
 )
 
-func showArray2d() {
-	s := [10][10]int{}
-	for y := 0; y < 10; y += 2 {
-		for x := 0; x < 10; x += 2 {
-			s[y][x] = 1
-			fmt.Print("|", y, x, "|")
-		}
-		fmt.Println("")
-	}
-	fmt.Println(s)
+type PokerInfo struct {
+	Right float64
+	Name  string
 }
 
-func readImages() {
-	img_pk := map[string]image.Image{}
+func pokerImgs() map[string]image.Image {
+	pk_img := map[string]image.Image{}
 
 	// 读取识别模板图片
 	img_index := 0
@@ -30,43 +23,39 @@ func readImages() {
 			key := k + strconv.Itoa(n)
 			img_path := "./assets/pk/" + key + ".png"
 			img_data := img.ReadImageInfo(img_index, img_path)
-			img_pk[key] = img_data
+			pk_img[key] = img_data
 			img_index++
 			// fmt.Println("img_index:", img_index, "key:", key, "img_path:", img_path)
 		}
 	}
 
-	// 读取需要解析的图片
-	img_path := []string{
-		"001 (1).jpg",
-		// "001 (1).png",
-		// "001 (2).jpg",
-		// "001 (2).png",
-	}
-	for i, v := range img_path {
-		img_data := img.ReadImageInfo(i, "./assets/source/"+v)
-		img.WriteImageInfo(i, img_data, img_pk)
-	}
+	return pk_img
 }
 
 func main() {
 	// 开始时间
 	startTime := time.Now()
-	fmt.Println(startTime)
 
-	// // 二维数据示例
-	// showArray2d()
+	// 扑克默认拉伸宽高
+	PKW := 70
+	PKH := 100
 
 	// // // 生成渐变色图片
 	// // img.Demo()
 
-	// // 目录图片读取
-	// readImages()
-
-	// var reaultArr = img.FindRect("./assets/source/001 (1).png")
+	// 读取扑克目录图片，并修改大小为 70x100
+	pkImgs := pokerImgs()
+	for k, v := range pkImgs {
+		// 将裁剪后的图片强制拉伸到指定宽高（不保持原比例）
+		stretchImg, err := img.StretchImage(v, PKW, PKH)
+		if err != nil {
+			continue
+		}
+		pkImgs[k] = stretchImg
+	}
 
 	// 读取需要解析的图片
-	srcImg := img.ReadImageInfo(1, "./assets/source/001 (1).jpg")
+	srcImg := img.ReadImageInfo(1, "./assets/source/001 (4).png")
 
 	// 处理图片为灰度图
 	srcImg = img.Filter(srcImg)
@@ -81,8 +70,34 @@ func main() {
 			fmt.Printf("裁剪第%d个区域失败: %v\n", i+1, err)
 			continue
 		}
-		// 后续可对 cropImg 进行保存、识别等处理
-		img.SaveImg(cropImg, i)
+
+		// 比较结果
+		temp := PokerInfo{Right: 0.0, Name: ""}
+		for k, v := range pkImgs {
+			// // 计算两张图片的感知相似率
+			// res, err := img.ImageSimilarity(cropImg, v)
+
+			// 将图片拉伸到一样的大小再进行比较
+			stretchedImg, err := img.StretchImage(cropImg, PKW, PKH)
+			if err != nil {
+				fmt.Printf("拉伸第%d个区域失败: %v\n", i+1, err)
+				continue
+			}
+
+			// 基于均方误差计算像素级相似率
+			res, err := img.ImageSimilarityMSE(v, stretchedImg)
+			if err != nil {
+				fmt.Println("对比失败:", err)
+			} else if res > temp.Right {
+				temp.Right = res
+				temp.Name = k
+			}
+
+		}
+		fmt.Printf("相似率：%.4f%% (%s)\n", temp.Right*100, img.ConvertCardString(temp.Name))
+
+		// // 保存
+		// img.SaveImg(cropImg, i)
 	}
 
 	// 结束时间

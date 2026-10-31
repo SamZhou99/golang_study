@@ -5,6 +5,7 @@ import (
 	"image/draw"
 	_ "image/jpeg"
 	_ "image/png"
+	"sort"
 )
 
 // WhiteRect 白色区域的外接矩形信息
@@ -181,37 +182,24 @@ func FindWhiteRectangles(img image.Image, minSize int, whiteThreshold uint8) []W
 		}
 	}
 
+	// 按照从上到下、从左到右的顺序排序
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].Y != result[j].Y {
+			return result[i].Y < result[j].Y
+		}
+		return result[i].X < result[j].X
+	})
+
 	return result
 }
 
 // 查找图片中宽高均大于50像素的白色区域，白色阈值240
 func FindRect(img image.Image) []WhiteRect {
-	// // 1. 打开图片文件
-	// file, err := os.Open(imgPath)
-	// if err != nil {
-	// 	panic(fmt.Sprintf("打开图片失败: %v", err))
-	// }
-	// defer file.Close()
-
-	// // 2. 解码图片
-	// img, _, err := image.Decode(file)
-	// if err != nil {
-	// 	panic(fmt.Sprintf("解码图片失败: %v", err))
-	// }
-
-	// 3. 查找宽高均大于50像素的白色区域，白色阈值240
+	// 查找宽高均大于50像素的白色区域，白色阈值240
 	rects := FindWhiteRectangles(img, 50, 240)
 
-	// 4. 输出结果
+	// 输出结果
 	var reaultArr []WhiteRect = []WhiteRect{}
-
-	// fmt.Printf("共找到 %d 个符合条件的白色区域:\n", len(rects))
-	// for i, r := range rects {
-	// 	fmt.Printf("区域 %d: 左上角(%d, %d)，宽高(%d, %d)\n",
-	// 		i+1, r.X, r.Y, r.W, r.H)
-	// 	reaultArr = append(reaultArr, r)
-	// }
-
 	for _, r := range rects {
 		reaultArr = append(reaultArr, r)
 	}
